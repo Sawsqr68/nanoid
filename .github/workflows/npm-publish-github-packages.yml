@@ -1,0 +1,96 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          $ node ./test/benchmark.js
+crypto.randomUUID          7,619,041 ops/sec
+uuid v4                    7,436,626 ops/sec
+@napi-rs/uuid              4,730,614 ops/sec
+uid/secure                 4,729,185 ops/sec
+@lukeed/uuid               4,015,673 ops/sec
+nanoid                     3,693,964 ops/sec
+customAlphabet             2,799,255 ops/sec
+nanoid for browser           380,915 ops/sec
+secure-random-string         362,316 ops/sec
+uid-safe.sync                354,234 ops/sec
+shortid                       38,808 ops/sec
+
+Non-secure:
+uid                       11,872,105 ops/sec
+nanoid/non-secure          2,226,483 ops/sec
+rndm                       2,308,044 ops/sec
+npm install nanoid
+let nanoid
+module.exports.createID = async () => {
+  if (!nanoid) ({ nanoid } = await import('nanoid'))
+  return nanoid() // => "V1StGXR8_Z5jdHi6B-myT"
+}
+// Replace `nanoid` to `@sitnik/nanoid` in all imports
+import { nanoid } from '@sitnik/nanoid
+import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
+jsr:@sitnik/nanoid
+import { nanoid } from 'https://cdn.jsdelivr.net/npm/nanoid/nanoid.js'
+nanoid(10) //=> "IRFa-VaY2b"
+import { customAlphabet } from 'nanoid'
+const nanoid = customAlphabet('1234567890abcdef', 10)
+model.id = nanoid(5) //=> "f01a2"
+import { customRandom } from 'nanoid'
+
+const rng = seedrandom(seed)
+const nanoid = customRandom('abcdef', 10, size => {
+  return (new Uint8Array(size)).map(() => 256 * rng())
+})
+
+nanoid() //=> "fbaefaadeb"
+const { customRandom, urlAlphabet } = require('nanoid')
+const nanoid = customRandom(urlAlphabet, 10, random)
+key
+function Todos({todos}) {
+  return (
+    <ul>
+      {todos.map(todo => (
+        <li key={nanoid()}> /* DON’T DO IT */
+          {todo.text}
+        </li>
+      ))}
+    </ul>
+  )
+}
+const todoItems = todos.map((text, index) =>
+  <li key={index}> /* Still not recommended but preferred over nanoid().
+                      Only do this if items have no stable IDs. */
+    {text}
+  </li>
+)
